@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saves</title>
+
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 100px;
+        }
+        /* the dark portion */
+        .header {
+            height: 30px;
+            width: 100dvw;
+            max-width: 800px;
+            background-color: #001F2B;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        /* save and clear all */
+        .savesAndClearAllDiv {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100dvw;
+            max-width: 800px;
+        }
+        .savesAndClearAllDiv h3, .savesAndClearAllDiv button {
+            margin-inline: 30px;
+        }
+        .savesAndClearAllDiv h3 {
+            font-weight: bold;
+            color: #385059;
+        }
+        .savesAndClearAllDiv button {
+            height: 30px;
+            width: 100px;
+            background-color: #385059;
+            border: none;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* receipt summary component */
+        .receiptSummaryComponent {
+            padding-top: 8px;
+            background-color: #E6ECF0;
+            width: 100dvw;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        .receiptSummaryComponent b, p {
+            color: #385059;
+            font-size: small;
+        }
+        .receiptUpperPart {
+            padding-inline: 15px;
+        }
+        .receiptLowerPart {
+            padding-left: 15px;
+        }
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .remark {
+            flex: 1;
+        }
+        .top button {
+            background-color: #385059;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            height: 25px;
+            width: 25px;
+            font-weight: bold;
+            margin-left: 20px;
+            /* pointer-events: none; */
+        }
+        .remarkText p {
+            margin: 0px;
+        }
+        .receiptLowerPart {
+            margin-top: 5px;
+            border-block: 1px solid #AAC0CE;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 25px;
+        }
+        .totalDiv {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 27px;
+            width: 100px;
+            background-color: #385059;
+            margin-left: 20px;
+        }
+        .totalVp {
+            flex: 1;
+        }
+        .totalDiv b {
+            color: white;
+        }
+
+        /* navigation bar at the bottom */
+        .navigation {
+            width: 100dvw;
+            max-width: 800px;
+            background-color: #ffffff;
+            border-top: 1px solid #91ABB4;
+            display: flex;
+            justify-content: space-evenly;
+            position: fixed;
+            bottom: 0;
+        }
+        .navHome, .navLive, .navSaved, .navProfile {
+            height: 70px;
+            width: 60px;
+            background-color: transparent;
+            border: none;
+            color: #7D8588;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .navigation button:active{
+            border-top: 2px solid #385059;
+            color: #385059;
+            text-decoration: underline;
+        }
+        .navigation button:hover{
+            border-top: 3px solid #385059;
+            color: #385059;
+            text-decoration: underline;
+        }
+        .navSaved {
+            border-top: 2px solid #385059;
+            color: #385059;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header"></div>
+
+    <div class="savesAndClearAllDiv">
+        <h3>Saves:</h3>
+        <button>Clear all</button>
+    </div>
+
+    <div class="receiptSummaryComponentDiv" id="receiptSummaryComponentDiv">
+
+    </div>
+    
+    <div class="navigation" id="navigation">
+        <button class="navHome" onclick="window.location.href='home.html'">Home</button>
+        <button class="navLive">Live</button>
+        <button class="navSaved">Saved</button>
+        <button class="navProfile" onclick="window.location.href='Profile.html'">Profile</button>
+    </div>
+</body>
+
+<script>
+
+    // this is sample array
+    var savedReceipt = [
+        {
+            'remark' : 'This is remark 01',
+            'discount' : '42%',
+            'date' : '01-Feb-2024',
+            'totalVp' : 205.63,
+            'totalQty' : 12,
+            'totalAmt' : 20665,
+            'products' : [
+                {
+                    'id' : 0 ,
+                    'name' : 'Formula 1' ,
+                    'vp' : 21.75 ,
+                    'd42' : 1503 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 1 ,
+                    'name' : 'PPP - 200g' ,
+                    'vp' : 11.50 ,
+                    'd42' : 893 ,
+                    'qty' : 2
+                },
+                {
+                    'id' : 2 ,
+                    'name' : 'PPP - 400g' ,
+                    'vp' : 22.50 ,
+                    'd42' : 1714 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 3 ,
+                    'name' : 'ShakeMate' ,
+                    'vp' : 6.45 ,
+                    'd42' : 564 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 4 ,
+                    'name' : 'Ocular Defence' ,
+                    'vp' : 19.25 ,
+                    'd42' : 1330 ,
+                    'qty' : 3
+                },
+                {
+                    'id' : 5 ,
+                    'name' : 'Male Factor' ,
+                    'vp' : 34.75 ,
+                    'd42' : 2352 ,
+                    'qty' : 2
+                },
+            ]
+        },
+
+        {
+            'remark' : 'This is remark 02',
+            'discount' : '42%',
+            'date' : '20-Jan-2024',
+            'totalVp' : 155.03,
+            'totalQty' : 5,
+            'totalAmt' : 12032,
+            'products' : [
+                {
+                    'id' : 0 ,
+                    'name' : 'Formula 1' ,
+                    'vp' : 21.75 ,
+                    'd42' : 1503 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 1 ,
+                    'name' : 'PPP - 200g' ,
+                    'vp' : 11.50 ,
+                    'd42' : 893 ,
+                    'qty' : 2
+                },
+                {
+                    'id' : 2 ,
+                    'name' : 'PPP - 400g' ,
+                    'vp' : 22.50 ,
+                    'd42' : 1714 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 3 ,
+                    'name' : 'ShakeMate' ,
+                    'vp' : 6.45 ,
+                    'd42' : 564 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 4 ,
+                    'name' : 'Ocular Defence' ,
+                    'vp' : 19.25 ,
+                    'd42' : 1330 ,
+                    'qty' : 3
+                },
+                {
+                    'id' : 5 ,
+                    'name' : 'Male Factor' ,
+                    'vp' : 34.75 ,
+                    'd42' : 2352 ,
+                    'qty' : 2
+                },
+            ]
+        },
+
+        {
+            'remark' : 'This is remark 03',
+            'discount' : '42%',
+            'date' : '17-Jan-2024',
+            'totalVp' : 52.67,
+            'totalQty' : 3,
+            'totalAmt' : 12043,
+            'products' : [
+                {
+                    'id' : 0 ,
+                    'name' : 'Formula 1' ,
+                    'vp' : 21.75 ,
+                    'd42' : 1503 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 1 ,
+                    'name' : 'PPP - 200g' ,
+                    'vp' : 11.50 ,
+                    'd42' : 893 ,
+                    'qty' : 2
+                },
+                {
+                    'id' : 2 ,
+                    'name' : 'PPP - 400g' ,
+                    'vp' : 22.50 ,
+                    'd42' : 1714 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 3 ,
+                    'name' : 'ShakeMate' ,
+                    'vp' : 6.45 ,
+                    'd42' : 564 ,
+                    'qty' : 1
+                },
+                {
+                    'id' : 4 ,
+                    'name' : 'Ocular Defence' ,
+                    'vp' : 19.25 ,
+                    'd42' : 1330 ,
+                    'qty' : 3
+                },
+                {
+                    'id' : 5 ,
+                    'name' : 'Male Factor' ,
+                    'vp' : 34.75 ,
+                    'd42' : 2352 ,
+                    'qty' : 2
+                },
+            ]
+        },
+    ]
+
+    var receiptSummaryComponentDiv = document.getElementById('receiptSummaryComponentDiv');
+    for (var i = 0; i < savedReceipt.length; i++) {
+        var rowReceipt = `
+            <div class="receiptSummaryComponent">
+                <div class="receiptUpperPart">
+                    <div class="top">
+                        <b class="remark">Remark:</b>
+                        <b>Date: ${savedReceipt[i].date}</b>
+                        <button>x</button>
+                    </div>
+                    <div class="remarkText">
+                        <p>
+                            ${savedReceipt[i].remark}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="receiptLowerPart">
+                    <b class="totalVp">${savedReceipt[i].totalVp} vp</b>
+                    <b>Total qty. ${savedReceipt[i].totalQty}</b>
+                    <div class="totalDiv">
+                        <b>₹${savedReceipt[i].totalAmt}/-</b>
+                    </div>
+                </div>
+            </div>
+        `;
+        receiptSummaryComponentDiv.innerHTML += rowReceipt;
+    }
+</script>
+</html>
